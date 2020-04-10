@@ -24,7 +24,7 @@ for (i = 0; i < t; i++) {
     for (j = 0; j < n[i]; ++j) {
         h[j] = Integer.parseInt(s2.nextToken());
     }
-    double g[]=findg( k[i], n[i],h);
+    
     D= new double[n[i]][n[i]];
     A= new double[n[i]][n[i]];
     H= new double[n[i]][n[i]];
@@ -33,9 +33,9 @@ for (i = 0; i < t; i++) {
     for(m=0;m<n[i];m++){
         for(q=0;q<n[i];q++){
             A[m][q]=findmean(m,q,h);
-            System.out.print(A[m][q]);
+           // System.out.print(A[m][q]+"  ");
         }
-        System.out.println();
+       // System.out.println();
     }
     for(m=0;m<n[i];m++){
         for(q=0;q<n[i];q++){
@@ -49,21 +49,22 @@ for (i = 0; i < t; i++) {
         }
        // System.out.println();
     }
-    for(m=0;m<n[i];m++){
-        for(q=0;q<n[i];q++){
+    // for(m=0;m<n[i];m++){
+    //     for(q=0;q<n[i];q++){
             
-            System.out.print(H[m][q]+"  ");
-        }
-        System.out.println();
-    }
+    //         System.out.print(H[m][q]+"  ");
+    //     }
+    //     System.out.println();
+    // }
     for(m=0;m<n[i];m++){
         for(q=0;q<n[i];q++){
-            D[m][q]=Math.pow(H[m][q],2)/(q-m+1)-Math.pow(A[m][q],2);
-            System.out.print(D[m][q]+"  ");
+            if(q>=m)
+            D[m][q]=H[m][q-m]-(Math.pow(A[m][q],2)*(q-m+1));
+           // System.out.print(D[m][q]+"  ");
         }
-        System.out.println();
+       // System.out.println();
     }
-   
+    double g[]=findg( k[i], n[i],h);
     for(m=1;m<g.length;m++){
         if(g[m]!=g[m-1])
           c++;
@@ -78,27 +79,27 @@ for (i = 0; i < t; i++) {
     }
  }
 }
-public static double findd(int h[], int i, int j){
-    double d=0.0;
-    double g[]= new double[j];
-    int m;
+// public static double findd(int h[], int i, int j){
+//     double d=0.0;
+//     double g[]= new double[j];
+//     int m;
   
         
-            double a= findmean(i,j-1,h);
-            for(m=i;m<j;m++){
-                d+=Math.pow(h[m]-a,2);
+//             double a= A[i][j-1];
+//             for(m=i;m<j;m++){
+//                 d+=Math.pow(h[m]-a,2);
 
-            }
+//             }
 
-    return d;
-}
+//     return d;
+// }
 
 public static double[] findg(int i, int j,int h[] ){
     int m;
     double g[]= new double[j];
     
     if(i==1){
-        g[0]=findmean(0,j-1,h);
+        g[0]=A[0][j-1];
         for(m=1;m<j;m++){
             g[m]=g[0];
         }
@@ -109,7 +110,7 @@ public static double[] findg(int i, int j,int h[] ){
             if(m<t)
                 g[m]= findg(i-1,t,h)[m];
             else
-                g[m]= findmean(t,j-1,h);
+                g[m]= A[t][j-1];
 
         }
     }
@@ -141,8 +142,8 @@ public static int findt(int i, int j, int h[]){ //if j is last number, it's inde
     int t=0;
     for(s=i-1;s<=(j-1);s++){
         g= findg(i-1,s,h);
-        total= findd(h,s,j)+findlsquare(g,h);
-    
+       // total= findd(h,s,j)+findlsquare(g,h);
+       total= D[s][j-1]+findlsquare(g,h);
         if(total<min){
             min=total;
             t=s;
